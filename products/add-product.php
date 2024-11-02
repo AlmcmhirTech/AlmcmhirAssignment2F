@@ -43,10 +43,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
     $imageFileType = strtolower(pathinfo($image, PATHINFO_EXTENSION));
-    if(empty($image)){
+     if(empty($image)){
         $imageErr = 'Product image is required.';
-    }else if(!in_array($imageFileType, $allowedType)){
+    }else{
+        if (!in_array($imageFileType, $allowedType)){
         $imageErr = 'Accepted files are jpg, jpeg, and png only.';
+        }
+        else if($_FILES['product_image']['size'] > 5 * 1024 * 1024) {
+        $imageErr = 'File size must be less than 5 MB.';
+        }
     }
 
     // If there are validation errors, return them as JSON
